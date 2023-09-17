@@ -14,14 +14,30 @@ type MyEvent struct {
 }
 
 type Response struct {
-	IsBase64Encoded bool   `json:"isBase64Encoded"`
-	StatusCode      int    `json:"statusCode"`
-	Body            string `json:"body"`
+	IsBase64Encoded bool              `json:"isBase64Encoded"`
+	StatusCode      int               `json:"statusCode"`
+	Headers         map[string]string `json:"headers"`
+	Body            string            `json:"body"`
 }
 
 func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (Response, error) {
 
 	fmt.Printf("Request!!!: %+v\n", request)
+
+	if request.HTTPMethod == "OPTIONS" {
+		return Response{
+			IsBase64Encoded: false,
+			StatusCode:      200,
+			Headers: map[string]string{
+				"Access-Control-Allow-Headers":  "*",
+				"Access-Control-Allow-Methods":  "*",
+				"Access-Control-Allow-Origin":   "*",
+				"Access-Control-Expose-Headers": "*",
+				"Access-Control-Max-Age":        "30",
+			},
+			Body: "",
+		}, nil
+	}
 
 	myEvent := MyEvent{}
 	if err := json.Unmarshal([]byte(request.Body), &myEvent); err != nil {
@@ -36,7 +52,10 @@ func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 	return Response{
 		IsBase64Encoded: false,
 		StatusCode:      200,
-		Body:            body,
+		Headers: map[string]string{
+			"Access-Control-Allow-Origin": "*",
+		},
+		Body: body,
 	}, nil
 
 }

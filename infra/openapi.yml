@@ -4,7 +4,19 @@ info:
   version: "2020-09-09T06:11:13Z"
 paths:
   /hello:
-    post:
+    options:
+      responses:
+        200:
+          description: "200 response"
+      x-amazon-apigateway-auth:
+        type: "NONE"   
+      x-amazon-apigateway-integration:
+        httpMethod: "POST"
+        uri: "${lambda_arn}"
+        credentials: "${credential_arn}"
+        payloadFormatVersion: "1.0"
+        type: "AWS_PROXY"      
+    post: 
       requestBody:
         content:
           application/json:

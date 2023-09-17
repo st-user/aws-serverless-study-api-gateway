@@ -69,6 +69,10 @@ resource "aws_api_gateway_stage" "prod" {
   }
 }
 
+output "api_gateway_prod_url" {
+  value = aws_api_gateway_stage.prod.invoke_url
+}
+
 resource "aws_cloudwatch_log_group" "access-log-group" {
   name              = "/my-api-gateway-access-logs/${aws_api_gateway_rest_api.api.name}"
   retention_in_days = 14
@@ -118,3 +122,4 @@ resource "aws_iam_role_policy" "cloudwatch" {
   role   = aws_iam_role.cloudwatch.id
   policy = data.aws_iam_policy_document.cloudwatch.json
 }
+

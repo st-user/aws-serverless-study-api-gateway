@@ -1,6 +1,6 @@
 ```
 GOARCH=amd64 GOOS=linux go build -o ../functions/bin/sample ../functions/src/*.go
-mkdir ../functions/archive && zip -j ../functions/archive/sample.zip ../functions/bin/sample
+mkdir -p ../functions/archive && zip -j ../functions/archive/sample.zip ../functions/bin/sample
 ```
 
 ```
